@@ -1,4 +1,4 @@
-import React, { FC, useMemo } from 'react';
+import React, { FC } from 'react';
 import ReactSortable from 'react-sortablejs';
 import { Form } from 'antd';
 import { v1 as uuid } from 'uuid';
@@ -7,7 +7,7 @@ import ComponentStore from '../Fields';
 import { SortableEvent } from 'sortablejs';
 import { IFormItemConfig } from '../../type';
 import { getItem, setInfo } from '../../utils';
-import { useFormState } from '../../models';
+import { useFormState } from '../../context';
 import _ from 'lodash';
 
 const FormContent: FC = () => {
@@ -17,7 +17,7 @@ const FormContent: FC = () => {
    * @param evt sortablejs实例
    */
   const handleOnAdd = (evt: SortableEvent) => {
-    const { clone: dragNode, to: toNode, newIndex } = evt;
+    const { clone: dragNode, newIndex } = evt;
     if (!newIndex) return;
     const dragNodeType = dragNode.dataset.type;
     const formConfigs = _.cloneDeep(config);
@@ -87,24 +87,24 @@ const FormContent: FC = () => {
   /***
    * @description 渲染
    */
-  const renderSortableItem = useMemo(() => {
+  const renderSortableItem = () => {
     return _.map(config, (child: IFormItemConfig) => {
-      const Item = ComponentStore.getComponent(child.type);
+      const Item = ComponentStore.getComponent(child.type).View;
       const { options } = child;
       return (
         <Form.Item
           key={child.id}
           data-id={child.id}
           data-type={child.type}
-          label={options?.label}
-          name={options?.field}
-          required={options?.required}
+          label={options.label}
+          name={options.field}
+          required={options.required}
         >
-          <Item.View key={child.id} />
+          <Item />
         </Form.Item>
       );
     });
-  }, [config]);
+  };
 
   return (
     <Form layout="vertical">
@@ -121,7 +121,7 @@ const FormContent: FC = () => {
         }}
         onChange={handleOnChange}
       >
-        {renderSortableItem}
+        {renderSortableItem()}
       </ReactSortable>
     </Form>
   );

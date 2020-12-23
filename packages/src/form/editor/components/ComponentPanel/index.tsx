@@ -6,11 +6,11 @@ interface IPanel {
   componentList: any;
 }
 
-const FormFieldsPanel: FC<IPanel> = ({ componentList }) => {
+const FieldsPanel: FC<IPanel> = ({ componentList }) => {
   return (
     <ReactSortable
       options={{
-        group: { name: 'formItem', pull: 'clone', put: false },
+        group: { name: 'item', pull: 'clone', put: false },
         sort: false,
       }}
       className="panelWrapepr"
@@ -25,10 +25,10 @@ const FormFieldsPanel: FC<IPanel> = ({ componentList }) => {
           >
             {item.name}
           </div>
-        ),
+        )
       )}
     </ReactSortable>
   );
 };
 
-export default FormFieldsPanel;
+export default FieldsPanel;

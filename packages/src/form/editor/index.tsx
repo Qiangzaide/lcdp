@@ -4,7 +4,7 @@ import FormPanel from './components/ComponentPanel';
 import ComponentStore from './components/Fields';
 import FormContent from './components/Content';
 import ItemConfig from './components/Config';
-import { FormStateContext } from './models/index';
+import { FormStateContext } from './context/index';
 import { IFormItemConfig } from './type';
 import './index.less';
 
@@ -33,7 +33,7 @@ const FormProvider: FC = ({ children }) => {
       },
     },
   ]);
-  const [selectKey, setSelectKey] = useState<string>('');
+  // const [selectKey, setSelectKey] = useState<string>('');
 
   const handleOnChange = useCallback((params: IFormItemConfig[]) => {
     setConfig(params);
@@ -51,12 +51,14 @@ const FormProvider: FC = ({ children }) => {
   );
 };
 
+const components = ComponentStore.getComponentList();
+
 const FormEditor = () => {
   return (
     <Layout className="wrapper">
       <FormProvider>
         <Layout.Sider theme="light" width={320} className="sider">
-          <FormPanel componentList={ComponentStore.getComponentList()} />
+          <FormPanel componentList={components} />
         </Layout.Sider>
         <Layout.Content className="content">
           <FormContent />
